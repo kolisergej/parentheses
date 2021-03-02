@@ -46,9 +46,11 @@ void process_current(string& result, string& current, stack<char>& st) {
     current.clear();
 }
 
-void process(const string& input, size_t start, size_t end, string& result, string& current, stack<char>& st) {
-    for (size_t i = start; i < end; ++i) {
-        const auto ch = input[i];
+string process(const string& input) {
+    string result;
+    string current; 
+    stack<char> st;
+    for (const auto ch: input) {
         if (kDict.count(ch)) {
             st.push(ch);
             current += ch;
@@ -72,26 +74,54 @@ void process(const string& input, size_t start, size_t end, string& result, stri
             current += ch;
         }
     }
-}
-
-string run(const string& input) {
-    size_t first_close_idx = 0;
-    while (first_close_idx < input.size() && kValues.count(input[first_close_idx])) {
-        ++first_close_idx;
-    }
-    string result;
-    string current;
-    stack<char> st;
-    process(input, first_close_idx, input.size(), result, current, st);
-    if (first_close_idx > 0) {
-        process(input, 0, first_close_idx, result, current, st);
-    }
-
     if (!current.empty()) {
         process_current(result, current, st);
     }
+    return result;
+}
 
-    result = (result.size() == input.size()) ? "Infinite" : result;
+bool check_infinite(const std::string& input) {
+    size_t first_open_idx = 0;
+    while (first_open_idx < input.size() && kValues.count(input[first_open_idx])) {
+        ++first_open_idx;
+    }
+    stack<char> st;
+    const auto check_ch = [&st, &input](size_t i) {
+        const auto ch = input[i];
+        if (kDict.count(input[i])) {
+            st.push(ch);
+            return true;
+        }
+        if (!kValues.count(ch)) {
+            return true;
+        }
+        if (!st.empty() && kDict.at(st.top()) == ch) {
+            st.pop();
+            return true;
+        }
+        return false;
+    };
+
+    for (size_t i = first_open_idx; i < input.size(); ++i) {
+        if (!check_ch(i)) {
+            return false;
+        }
+    }
+    for (size_t i = 0; i < first_open_idx; ++i) {
+        if (!check_ch(i)) {
+            return false;
+        }
+    }
+    return st.empty();
+}
+
+string run(const string& input) {
+    if (check_infinite(input)) {
+        return kInfinite;
+    }
+    
+    const string double_input = input + input;
+    const string result = process(double_input);
     cout << "result: " << result << endl;
     return result;
 }
@@ -107,7 +137,7 @@ int main() {
 
     // assert(run("]})") == "");
     // assert(run("())") == "()");
-    // assert(run("(()") == "()");
+    // assert(run("((aa)") == "(aa)");
     // assert(run("[[]") == "[]");
     // assert(run("[[])") == "[]");
     // assert(run("}](){") == "(){}");
@@ -118,7 +148,8 @@ int main() {
     // assert(run("[[b[aa]]") == "[b[aa]]");
     // assert(run("[[b[aa]]]]") == "[[b[aa]]]");
     // assert(run("[[b[aa]]}") == "[b[aa]]");
-    assert(run("]h({h(b})b)[") == "[]");
-    assert(run("]h({hdd(b})b)[") == "hdd");
+    // assert(run("]h({hh(b})b)[") == "hh");
+    // assert(run("]h({h(bb})b)[") == "[]h");
+    // assert(run("]h({hdd(b})b)[") == "hdd");
     return 0;
 }
