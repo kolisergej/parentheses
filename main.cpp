@@ -17,7 +17,7 @@ const unordered_set<char> kValues{'}', ')', ']'};
 
 bool check_infinite(const string& input) {
     size_t first_open_idx = 0;
-    while (first_open_idx < input.size() && kValues.count(input[first_open_idx])) {
+    while (first_open_idx < input.size() && !kDict.count(input[first_open_idx])) {
         ++first_open_idx;
     }
     stack<char> st;
@@ -147,44 +147,38 @@ int main() {
     // assert(run("]h({hdb}b)[") == kInfinite);
     // assert(run("[[b[aa]]]") == kInfinite);
     // assert(run("]][[b[aa]") == kInfinite);
-    assert(run("aaaa)((aaa)") == kInfinite);
+    // assert(run("aaaa)((aaa)") == kInfinite);
 
-    assert(run("]})") == "");
-    assert(run("())") == "()");
-    assert(run("((aa)") == "(aa)");
-    assert(run("[[]") == "[]");
-    assert(run("[[])") == "[]");
-    assert(run("}](){") == "(){}");
+    // assert(run("]})") == "");
+    // assert(run("())") == "()");
+    // assert(run("((aa)") == "(aa)");
+    // assert(run("[[]") == "[]");
+    // assert(run("[[])") == "[]");
+    // assert(run("}](){") == "(){}");
 
-    assert(run("aa)((aaaaa") == "(aaaaaaa)");
-    assert(run("((aaa)((aa)") == "(aaa)");
-    assert(run("((aaa)((aaa)") == "(aaa)");
-    assert(run("aaaaaaa)") == "aaaaaaa");
-    assert(run("(aaaaaaa") == "aaaaaaa");
-    assert(run("((aa)(aa)") == "(aa)(aa)");
-    assert(run("(aa(aa)a(aa)a))") == "(aa(aa)a(aa)a)");
-    assert(run("((aa(aa)a(aa)a)") == "(aa(aa)a(aa)a)");
+    // assert(run("aa)((aaaaa") == "(aaaaaaa)");
+    // assert(run("((aaa)((aa)") == "(aaa)");
+    // assert(run("((aaa)((aaa)") == "(aaa)");
+    // assert(run("aaaaaaa)") == "aaaaaaa");
+    // assert(run("(aaaaaaa") == "aaaaaaa");
+    // assert(run("((aa)(aa)") == "(aa)(aa)");
+    // assert(run("(aa(aa)a(aa)a))") == "(aa(aa)a(aa)a)");
+    // assert(run("((aa(aa)a(aa)a)") == "(aa(aa)a(aa)a)");
+    // assert(run("(aa)aa(aa))") == "(aa)aa(aa)");
+    // assert(run("(aa(aa)aa(aa)))") == "(aa(aa)aa(aa))");
+    // assert(run("((aa)((aa)") == "(aa)");
+    // assert(run("((aa)(aa)((aa)") == "(aa)(aa)");
+    // assert(run("(aa))(aa))") == "(aa)");
+    // assert(run("(aba))(aa))") == "(aba)");
+    // assert(run("(aa)(aa))") == "(aa)(aa)");
+    // assert(run("((a{a})))") == "((a{a}))");
+    // assert(run("sh(dh)}") == "sh(dh)");
 
-    assert(run("(aa)aa(aa))") == "(aa)aa(aa)");
-    assert(run("(aa(aa)aa(aa)))") == "(aa(aa)aa(aa))");
-    // run("]h({hhh(b})b)[");
-    // run("]h({h(bb})b)[");
-    // run("]h({hdd(b})b)[");
+    // assert(run("[[b[aa]]") == "[b[aa]]");
+    // assert(run("[[b[aa]]]]") == "[[b[aa]]]");
+    // assert(run("[[b[aa]]}") == "[b[aa]]");
 
-    assert(run("((aa)((aa)") == "(aa)");
-    assert(run("((aa)(aa)((aa)") == "(aa)(aa)");
-    assert(run("(aa))(aa))") == "(aa)");
-    assert(run("(aba))(aa))") == "(aba)");
-    assert(run("(aa)(aa))") == "(aa)(aa)");
-    assert(run("((a{a})))") == "((a{a}))");
-
-    assert(run("aabbcc)") == "aabbcc");
-    assert(run("(aabbcc") == "aabbcc");
-    assert(run("sh(dh)}") == "sh(dh)");
-
-    assert(run("[[b[aa]]") == "[b[aa]]");
-    assert(run("[[b[aa]]]]") == "[[b[aa]]]");
-    assert(run("[[b[aa]]}") == "[b[aa]]");
+    run("]h({h(bb})b)[");
     // assert(run("]h({hhh(b})b)[") == "hhh");
     // assert(run("]h({h(bb})b)[") == "[]h");
     // assert(run("]h({hdd(b})b)[") == "hdd");
